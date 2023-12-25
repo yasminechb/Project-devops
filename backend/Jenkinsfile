@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+  stages {
+    stage('build and scan'){
+      steps{
+        withSonarQubeEnv('sonarqube'){
+          dir('demo'){
+            withGradle{
+              
+            sh 'gradle clean build sonarqube'
+            stash includes: '**/target/*.jar', name: 'app'
+            }
+          }
+        }
+      }
+    }
+    stage('publish to nexus'){
+      steps{
+        unstash 'app'
+        sh 'mv demo/target/backend-0.0.1-.jar demo/target/backend-0.0.${BUILD_NUMBER}.jar'
+        nexusArtifactUploader(
+          nexusVersion: 'nexus3',
+          protocol: 'http',
+          nexusUrl: 'localhost:8081',
+          groupId: 'devops',
+          version: '0.0.${BUILD_NUMBER}',
+          repository: 'myRepo',
+          credentialsId: 'NexusCredential',
+          artifacts: [
+              [artifactId: devops,
+               classifier: '',
+               file: 'demo/target/backend-0.0.${BUILD_NUMBER}.jar',
+               type: 'jar']
+          ]
+        ) 
+      }
+    }
+  }
+}
