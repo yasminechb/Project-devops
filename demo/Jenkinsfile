@@ -4,6 +4,7 @@ pipeline {
     stage('build and scan'){
       steps{
         withSonarQubeEnv('sonarqube'){
+          sh 'chmod +x demo/gradlew'
           sh 'demo/gradlew clean build sonarqube'
         }
       }
