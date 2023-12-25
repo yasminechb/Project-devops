@@ -34,11 +34,11 @@ pipeline {
     }
     stage('docker build'){
              steps {
+               dir('backend'){
               unstash 'app'
-               sh 'docker build -f backend/dockerfile .'
-               sh 'ls -l'
+               sh 'docker build .'
              }
-      
+           }
       }
   }
 }
