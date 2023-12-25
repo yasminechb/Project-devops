@@ -8,12 +8,12 @@ pipeline {
         RELEASE_VERSION = '1.0.0'
     }
     stages {
-        /*stage('Get Code from Github & clean workspace') {
-                steps {
-                        cleanWs()
-                        checkout scmGit(branches: [[name: '*/release/2.0.0']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/yasminechb/Project-devops']])
-                    }
-        }*/
+        //stage('Get Code from Github & clean workspace') {
+          //      steps {
+           //             cleanWs()
+           //             checkout scmGit(branches: [[name: '*/release/2.0.0']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/yasminechb/Project-devops']])
+           //         }
+      //  }
         
         stage('Build Angular'){
             agent {
