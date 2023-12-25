@@ -35,7 +35,7 @@ pipeline {
     stage('docker build'){
              steps {
               unstash 'app'
-               /*sh 'docker build backend/dockerfile'*/
+               sh 'docker build -f backend/dockerfile .'
                sh 'ls -l'
              }
       
