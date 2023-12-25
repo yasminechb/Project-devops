@@ -29,7 +29,7 @@ pipeline {
                file: 'target/backend-0.0.${BUILD_NUMBER}.jar',
                type: 'jar']
           ]
-        ) */
+        ) 
       }
     }
   }
