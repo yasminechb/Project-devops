@@ -61,6 +61,6 @@ pipeline {
           sh 'docker push ${USER}/devops:${BUILD_NUMBER}'
         }
       }
-    }*/
+    }
   }
 }
