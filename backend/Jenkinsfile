@@ -14,7 +14,8 @@ pipeline {
     stage('publish to nexus'){
       steps{
         unstash 'app'
-        sh 'mv demo/target/backend-0.0.1-.jar demo/target/backend-0.0.${BUILD_NUMBER}.jar'
+        sh 'ls -l '
+        /*sh 'mv demo/target/backend-0.0.1-.jar demo/target/backend-0.0.${BUILD_NUMBER}.jar'
         nexusArtifactUploader(
           nexusVersion: 'nexus3',
           protocol: 'http',
@@ -29,7 +30,7 @@ pipeline {
                file: 'demo/target/backend-0.0.${BUILD_NUMBER}.jar',
                type: 'jar']
           ]
-        ) 
+        ) */
       }
     }
   }
