@@ -5,8 +5,11 @@ pipeline {
       steps{
         withSonarQubeEnv('sonarqube'){
           dir('demo'){
+            withGradle{
+              
             sh 'gradle clean build sonarqube'
             stash includes: '**/target/*.jar', name: 'app'
+            }
           }
         }
       }
