@@ -4,10 +4,7 @@ pipeline {
     stage('build and scan'){
       steps{
         withSonarQubeEnv('sonarqube'){
-          dir('demo'){
-            withGradle{
-              
-            sh 'gradle clean build sonarqube'
+          sh './mvnw clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar' 
             stash includes: '**/target/*.jar', name: 'app'
             }
           }
