@@ -36,8 +36,17 @@ pipeline {
              steps {
                dir('backend'){
               unstash 'app'
-               sh 'docker build .'
+               sh 'docker build -t backend .'
              }
+           }
+      }
+    stage('docker push'){
+             steps {
+                withCredentials([usernamePassword(credentialsId: 'DockerHubCred', passwordVariable: 'PSW', usernameVariable: 'USER')]){
+                    sh 'docker tag backend ${USER}/devops:${BUILD_NUMBER}'
+                    sh 'echo ${PSW} | docker login -u ${USER} --password-stdin'
+                    sh 'docker push ${USER}/devops:${BUILD_NUMBER}'
+                }         
            }
       }
   }
