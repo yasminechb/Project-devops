@@ -19,21 +19,13 @@ pipeline {
    
       steps {
         dir('./MyApp') {
-          withDockerContainer('node:18.19.0-alpine3.18') {
-          sh 'chown -R 108:117 "/.npm"'
           sh 'npm install'
           sh 'npm run build'
-        }}
+        }
       }
     }
 
-    /*stage('Sonar Scanner') {
-      agent {
-        docker {
-          image 'node:18.19.0-alpine3.18'
-          reuseNode true
-        }
-      }
+    stage('Sonar Scanner') {
       steps {
         dir('./MyApp') {
           sh 'npm run sonar'
@@ -42,12 +34,6 @@ pipeline {
     }
 
     stage('Publish To Nexus') {
-      agent {
-        docker {
-          image 'node:18.19.0-alpine3.18'
-          reuseNode true
-        }
-      }
       steps {
         dir('./MyApp') {
           withCredentials([file(credentialsId: 'mynpm-cred', variable: 'mynpmrc')]) {
