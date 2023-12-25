@@ -16,16 +16,13 @@ pipeline {
     //  }
 
     stage('Build Angular') {
-      agent {
-        docker {
-          image 'node:18.19.0-alpine3.18'
-        }
-      }
+   
       steps {
         dir('./MyApp') {
+          withDockerContainer('node:18.19.0-alpine3.18') {
           sh 'npm install'
           sh 'npm run build'
-        }
+        }}
       }
     }
 
