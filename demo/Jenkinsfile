@@ -4,11 +4,10 @@ pipeline {
     stage('build and scan'){
       steps{
         withSonarQubeEnv('sonarqube'){
-          sh 'chmod +x demo/gradlew'
-          withGradle{
-            sh 'demo/gradlew clean build sonarqube'
+          dir('demo'){
+            sh 'gradle clean build sonarqube'
+            stash includes: '**/target/*.jar', name: 'app'
           }
-          stash includes: '**/target/*.jar', name: 'app'
         }
       }
     }
