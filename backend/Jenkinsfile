@@ -4,8 +4,10 @@ pipeline {
     stage('build and scan'){
       steps{
         withSonarQubeEnv('sonarqube'){
-          sh 'backend/mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar' 
+          dir('backend'){
+          sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar' 
           stash includes: '**/target/*.jar', name: 'app'   
+          }
         }
       }
     }
