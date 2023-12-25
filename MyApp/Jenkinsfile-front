@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+    tools {
+        nodejs 'nodejs-21.0.0'
+        dockerTool 'docker'
+    }
+    environment {
+        RELEASE_VERSION = '1.0.0'
+    }
+    stages {
+        stage('Get Code from Github & clean workspace') {
+                steps {
+                        cleanWs()
+                        checkout scmGit(branches: [[name: '*/release/2.0.0']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/yasminechb/Project-devops']])
+                    }
+        }
+        
+        stage('Build Angular'){
+            steps{
+                dir('./MyApp') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Sonar Scanner') {
+            steps{
+                dir('./MyApp') {
+                    sh 'npm run sonar'
+                }
+            }
+        }
+
+        stage('Publish To Nexus') {
+            steps {
+                dir('./MyApp') {
+                withCredentials([file(credentialsId: 'mynpm-cred', variable: 'mynpmrc')]) {
+                    script{
+                        sh "npm publish --userconfig ${mynpmrc} --loglevel verbose"
+                    }
+                }
+            }
+            }
+        }
+        stage('Create docker image'){
+            steps{
+                dir('./MyApp') {
+                script{
+                    sh "docker build -t MyApp."
+                }
+                }
+            }
+        }
+        stage('Push to docker hub'){
+             steps {
+                withCredentials([usernamePassword(credentialsId: 'DockerHubCred', passwordVariable: 'PSW', usernameVariable: 'USER')]){
+                    sh 'docker tag backend ${USER}/devops:${BUILD_NUMBER}'
+                    sh 'echo ${PSW} | docker login -u ${USER} --password-stdin'
+                    sh 'docker push ${USER}/devops:${BUILD_NUMBER}'
+                }   
+                }
+            }
+        }
