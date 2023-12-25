@@ -32,10 +32,11 @@ pipeline {
         ) 
       }
     }
-    stage('docker buld'){
+    stage('docker build'){
              steps {
               unstash 'app'
-               sh 'docker build backend/dockerfile'
+               /*sh 'docker build backend/dockerfile'*/
+               sh 'ls -l'
              }
       
       }
